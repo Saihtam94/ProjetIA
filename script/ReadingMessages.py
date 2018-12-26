@@ -1,8 +1,11 @@
 
 from os import listdir
 from os.path import isfile, join, isdir
+import csv
 
 dbFolder = "../data/raw-data/maildir/"
+csvFilePath = "../data/csv-data/emails.csv"
+csvDelimiter = ','
 
 persons = ["allen-p"]
 if len(persons) == 0:
@@ -10,11 +13,11 @@ if len(persons) == 0:
 
 def parseRawMessage(raw_message):
 	lines = raw_message.split('\n')
-	email = {"body":"", "from":"", "to":"", "subject":"", "cc":"", "bcc":""}
+	email = {"text-body":"", "from":"", "to":"", "subject":"", "cc":"", "bcc":""}
 	keys = ['from', 'to', 'subject', 'cc', 'bcc']
 	for line in lines:
 		if ':' not in line:
-			email["body"] += line.strip()
+			email["text-body"] += line.strip()
 		else:
 			pairs = line.split(':')
 			key = pairs[0].lower()
@@ -24,8 +27,10 @@ def parseRawMessage(raw_message):
 			if key in keys:
 				email[key] = val
 	return email
-
-def dataPrepare(databasePath, persons):
+	
+def dataPrepare(databasePath, persons, csvFilePath="../data/csv-data/emails.csv", csvDelimiter=","):
+	csvFile = open(csvFilePath, 'w', newline='')
+	fileWriter = csv.writer(csvFile, delimiter=csvDelimiter)
 	for person in persons:
 		personMaildirFolder = join(databasePath, person)
 		if isdir(personMaildirFolder):
@@ -37,8 +42,17 @@ def dataPrepare(databasePath, persons):
 					filepath = join(personOneCategoryFolder, filename)
 					file = open(filepath, "r")
 					oneLineCSV = parseRawMessage(file.read())
-					# outputWithoutStopWords = parseBody(oneLineCSV["body"])
-					# outputWithoutStopWordsWithStemming = parseBodyStemming(oneLineCSV["body"])
-					# outputWithoutStopWordsWithLemmatization = parseBodyLemmatization(oneLineCSV["body"])
-					# Add oneLineCSV in CSV file
-dataPrepare(dbFolder, persons)
+					oneLineCSV["body"] = "" #parseBody(oneLineCSV["text-body"])
+					oneLineCSV["body-stemming"] = "" #parseBodyStemming(oneLineCSV["text-body"])
+					oneLineCSV["body-lemmatization"] = "" #parseBodyLemmatization(oneLineCSV["text-body"])
+					oneLineCSV["target"] = category
+					oneLineCSV.pop("text-body")
+					fileWriter.writerow([oneLineCSV["from"],
+										 oneLineCSV["to"],
+										 oneLineCSV["subject"],
+										 oneLineCSV["body"],
+										 oneLineCSV["body-stemming"],
+										 oneLineCSV["body-lemmatization"],
+										 oneLineCSV["cc"],
+										 oneLineCSV["bcc"],
+										 oneLineCSV["target"]])
