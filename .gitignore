@@ -1,1 +1,4 @@
 data/raw-data/maildir/*
+
+.DS_STORE*
+.idea*
