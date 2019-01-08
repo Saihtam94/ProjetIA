@@ -3,6 +3,8 @@ from os import listdir
 from os.path import isfile, join, isdir
 import csv
 
+from PrepareTexts import *
+
 dbFolder = "../data/raw-data/maildir/"
 csvFilePath = "../data/csv-data/emails.csv"
 csvDelimiter = ','
@@ -42,9 +44,9 @@ def dataPrepare(databasePath, persons, csvFilePath="../data/csv-data/emails.csv"
 					filepath = join(personOneCategoryFolder, filename)
 					file = open(filepath, "r")
 					oneLineCSV = parseRawMessage(file.read())
-					oneLineCSV["body"] = "" #parseBody(oneLineCSV["text-body"])
-					oneLineCSV["body-stemming"] = "" #parseBodyStemming(oneLineCSV["text-body"])
-					oneLineCSV["body-lemmatization"] = "" #parseBodyLemmatization(oneLineCSV["text-body"])
+					oneLineCSV["body"] = parseBody(oneLineCSV["text-body"])
+					oneLineCSV["body-stemming"] = parseBodyStemming(oneLineCSV["text-body"])
+					oneLineCSV["body-lemmatization"] = parseBodyLemmatization(oneLineCSV["text-body"])
 					oneLineCSV["target"] = category
 					oneLineCSV.pop("text-body")
 					fileWriter.writerow([oneLineCSV["from"],
@@ -56,3 +58,5 @@ def dataPrepare(databasePath, persons, csvFilePath="../data/csv-data/emails.csv"
 										 oneLineCSV["cc"],
 										 oneLineCSV["bcc"],
 										 oneLineCSV["target"]])
+
+dataPrepare(dbFolder, persons)

@@ -1,4 +1,5 @@
 import nltk
+import json
 
 from collections import Counter 
 
@@ -19,9 +20,8 @@ def parseBody(text):
 
 	for word in filtered_words:
 		# Count words in text.
-		count(word, data)
-
-	return data
+		count(word, data)	
+	return parser(data)
 
 def parseBodyStemming(text):
 	filtered_words = prepareText(text)
@@ -36,7 +36,7 @@ def parseBodyStemming(text):
 		# Count words in text.
 		count(word_stem, data)
 
-	return data
+	return parser(data)
 
 def parseBodyLemmatization(text):
 	filtered_words = prepareText(text)
@@ -49,7 +49,7 @@ def parseBodyLemmatization(text):
 		word_lem = wnl.lemmatize(word, get_pos(word))
 		# Count words in text.
 		count(word_lem, data)
-	return data
+	return parser(data)
 
 def count(word, data):
 	if word in data:
@@ -89,6 +89,9 @@ def prepareText(initialText):
 	# Remove stopwords.
 	filtered_words = [word for word in words if word not in stopwords.words('english')]
 	return filtered_words
+
+def parser(d):
+	return json.dumps(d)
 
 
 # Example

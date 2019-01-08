@@ -1,4 +1,7 @@
 data/raw-data/maildir/*
+data/csv-data/emails.csv
+
+*__pycache__*
 
 .DS_STORE*
 .idea*
