@@ -21,7 +21,7 @@ def parseBody(text):
 	for word in filtered_words:
 		# Count words in text.
 		count(word, data)	
-	return parser(data)
+	return data
 
 def parseBodyStemming(text):
 	filtered_words = prepareText(text)
