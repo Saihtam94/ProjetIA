@@ -6,8 +6,6 @@ import csv
 from PrepareTexts import *
 
 dbFolder = "../data/raw-data/maildir/"
-csvFilePath = "../data/csv-data/emails.csv"
-csvDelimiter = ','
 
 persons = ["allen-p"]
 if len(persons) == 0:
@@ -30,10 +28,10 @@ def parseRawMessage(raw_message):
 				email[key] = val
 	return email
 	
-def dataPrepare(databasePath, persons, csvFilePath="../data/csv-data/emails.csv", csvDelimiter=","):
-	csvFile = open(csvFilePath, 'w', newline='')
-	fileWriter = csv.writer(csvFile, delimiter=csvDelimiter)
+def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", csvDelimiter=","):
 	for person in persons:
+		csvFile = open(csvFileName + "_" + person + ".csv", 'w', newline='')
+		fileWriter = csv.writer(csvFile, delimiter=csvDelimiter)
 		personMaildirFolder = join(databasePath, person)
 		if isdir(personMaildirFolder):
 			personCategoriesFolders = [f for f in listdir(personMaildirFolder) if isdir(join(personMaildirFolder, f))]

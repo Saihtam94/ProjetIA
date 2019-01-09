@@ -93,21 +93,3 @@ def prepareText(initialText):
 def parser(d):
 	return json.dumps(d)
 
-
-# Example
-text = "Traveling to have a business meeting takes the fun out of the trip.  Especially if you have to prepare a presentation.  I would suggest holding the business plan meetings here then take a trip without any formal business meetings.  I would even try and get some honest opinions on whether a trip is even desired or necessary."
-
-print("--------------------")
-print("PARSE BODY")
-print("--------------------")
-parseBody(text)
-
-print("--------------------")
-print("STEMMING")
-print("--------------------")
-parseBodyStemming(text)
-
-print("--------------------")
-print("LEMMATIZATION")
-print("--------------------")
-parseBodyLemmatization(text)

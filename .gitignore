@@ -1,5 +1,5 @@
 data/raw-data/maildir/*
-data/csv-data/emails.csv
+data/csv-data/*
 
 *__pycache__*
 
