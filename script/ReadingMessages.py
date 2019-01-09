@@ -53,7 +53,7 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 					oneLineCSV["body"] = parseBody(oneLineCSV["text-body"])
 					#oneLineCSV["body-stemming"] = parseBodyStemming(oneLineCSV["text-body"])
 					#oneLineCSV["body-lemmatization"] = parseBodyLemmatization(oneLineCSV["text-body"])
-					oneLineCSV["target"] = category
+					oneLineCSV["target-category"] = category
 					oneLineCSV.pop("text-body")
 
 					wordList = dict()
@@ -61,18 +61,9 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 						if word not in headList:
 							headList.append(word)
 						wordList[word] = value
-					wordList["target"] = category
+					wordList["target-category"] = category
 					wordMatrix.append(wordList)
-
-					# fileWriter.writerow([oneLineCSV["from"],
-					# 					 oneLineCSV["to"],
-					# 					 oneLineCSV["subject"],
-					# 					 oneLineCSV["body"],
-					# 					 #oneLineCSV["body-stemming"],
-					# 					 #oneLineCSV["body-lemmatization"],
-					# 					 oneLineCSV["cc"],
-					# 					 oneLineCSV["bcc"],
-					# 					 oneLineCSV["target"]])
+			headList.append("target-category")
 			fileWriterBodyOnly.writerow(headList)
 			for line in wordMatrix:
 				oneLineCSV = []
