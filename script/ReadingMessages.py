@@ -5,9 +5,9 @@ import csv
 
 from PrepareTexts import *
 
-dbFolder = "../data/raw-data/maildir/stokley-c"
+dbFolder = "../data/raw-data/maildir/"
 
-persons = ["chris_stokley"]
+persons = ["bailey-s"]
 if len(persons) == 0:
 	persons = [ name for name in listdir(dbFolder) if isdir(join(dbFolder, name)) ]
 
@@ -76,10 +76,11 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 			fileWriterBodyOnly.writerow(headList)
 			for line in wordMatrix:
 				oneLineCSV = []
-				for word, value in line.items():
-					if word in headList:
-						oneLineCSV.append(value)
-					else:
+				for word in headList:
+					try:
+						if line[word]:
+							oneLineCSV.append(line[word])
+					except KeyError as e:
 						oneLineCSV.append(0)
 				fileWriterBodyOnly.writerow(oneLineCSV)
 					
