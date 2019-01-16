@@ -73,7 +73,7 @@ def get_pos(word):
 
 def prepareText(initialText):
 	# Remove punctuation.
-	punctuations = '.,'
+	punctuations = '.,/-~_#@+*\\|;:[]!?({})%$£<>=`'
 	text = ''
 
 	for char in initialText:
@@ -89,6 +89,3 @@ def prepareText(initialText):
 	# Remove stopwords.
 	filtered_words = [word for word in words if word not in stopwords.words('english')]
 	return filtered_words
-
-def parser(d):
-	return json.dumps(d)
