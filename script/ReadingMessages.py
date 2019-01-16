@@ -27,7 +27,7 @@ def parseRawMessage(raw_message):
 			if key in keys:
 				email[key] = val
 	return email
-	
+
 def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", csvDelimiter=","):
 	for person in persons:
 
@@ -58,9 +58,9 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 					if loading % 50 == 0:
 						print("loading [" + str(int(loading * 100 / fileCount)) + "%]")
 					filepath = join(personOneCategoryFolder, filename)
-					file = open(filepath, "r")
+					file = open(filepath, "r", encoding = "ISO-8859-1")
 					oneLineCSV = parseRawMessage(file.read())
-					oneLineCSV["body"] = parseBody(oneLineCSV["text-body"])
+					oneLineCSV["body"] = parseBodyLemmatization(oneLineCSV["text-body"])
 					#oneLineCSV["body-stemming"] = parseBodyStemming(oneLineCSV["text-body"])
 					#oneLineCSV["body-lemmatization"] = parseBodyLemmatization(oneLineCSV["text-body"])
 					oneLineCSV["target-category"] = category
@@ -100,6 +100,6 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 					except KeyError as err: # For target-category
 						oneLineCSV.append(line[word])
 				fileWriterBodyOnly.writerow(oneLineCSV)
-					
+
 
 dataPrepare(dbFolder, persons)
