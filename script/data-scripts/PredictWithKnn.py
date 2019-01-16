@@ -21,9 +21,9 @@ for file in emailsFileList:
 		targets.append(line.pop())
 		dataframe.append(list(map(float, line)))
 
-	le = LabelEncoder()
-	y = le.fit_transform(targets)
-	X_train, X_test, y_train, y_test = train_test_split(dataframe, y, test_size=0.2)
+	# le = LabelEncoder()
+	# y = le.fit_transform(targets)
+	X_train, X_test, y_train, y_test = train_test_split(dataframe, targets, test_size=0.2)
 
 	# KNN
 	neigh = KNeighborsClassifier(n_neighbors=4, weights="distance")
