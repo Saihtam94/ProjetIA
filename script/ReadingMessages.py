@@ -31,9 +31,6 @@ def parseRawMessage(raw_message):
 def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", csvDelimiter=","):
 	for person in persons:
 
-		# csvFile = open(csvFileName + "_" + person + ".csv", 'w', newline='')
-		# fileWriter = csv.writer(csvFile, delimiter=csvDelimiter)
-
 		csvFileBodyOnly = open(csvFileName + "_" + person + "_body_only.csv", 'w', newline='')
 		fileWriterBodyOnly = csv.writer(csvFileBodyOnly, delimiter=csvDelimiter)
 
@@ -43,6 +40,8 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 			
 			wordMatrix = []
 			headList = []
+
+			# Reading mails for one person
 			for category in personCategoriesFolders:
 				personOneCategoryFolder = join(personMaildirFolder, category)
 				personCategoryMailFiles = [f for f in listdir(personOneCategoryFolder) if isfile(join(personOneCategoryFolder, f))]
@@ -63,6 +62,10 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 						wordList[word] = value
 					wordList["target-category"] = category
 					wordMatrix.append(wordList)
+
+			
+
+			# Writing in CSV
 			headList.append("target-category")
 			fileWriterBodyOnly.writerow(headList)
 			for line in wordMatrix:
