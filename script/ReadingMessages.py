@@ -7,7 +7,8 @@ from PrepareTexts import *
 
 dbFolder = "../data/raw-data/maildir/"
 
-persons = ["campbell-l"]
+persons = ["badeer-r"]
+persons = ["hyatt-k"]
 categoriesToRemove = ['_sent_mail', 'deleted_items', 'all_documents', 'sent_items', 'inbox', 'sent', 'contacts', 'notes_inbox', 'discussion_threads', 'calendar']
 if len(persons) == 0:
     persons = [ name for name in listdir(dbFolder) if isdir(join(dbFolder, name)) ]

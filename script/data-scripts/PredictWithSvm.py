@@ -2,10 +2,10 @@ from os import listdir
 from os.path import isfile, join, isdir
 import csv
 import numpy
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
 csvsPath = "../../data/csv-data/"
@@ -26,12 +26,13 @@ for file in emailsFileList:
 	# y = le.fit_transform(targets)
 	X_train, X_test, y_train, y_test = train_test_split(dataframe, targets, test_size=0.2, random_state=11)
 
-	# KNN
-	neigh = KNeighborsClassifier(n_neighbors=4, weights="distance")
-	neigh.fit(X_train, y_train)
-	result = neigh.predict(X_test)
+	# SVM
+	svc = SVC(C=10, gamma='scale', kernel='rbf')
+	svc.fit(X_train, y_train)
+	result = svc.predict(X_test)
 	classif_report = classification_report(y_test, result)
-	print("\n### KNN for "+ file.split("_")[1] +" ###")
+	print("\n### SVM for "+ file.split("_")[1] +" ###")
 	print(classif_report)
+
 	print("accuracy_score = " + str(accuracy_score(y_test, result)))
 		
