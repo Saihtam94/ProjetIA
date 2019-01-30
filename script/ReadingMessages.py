@@ -10,6 +10,8 @@ dbFolder = "../data/raw-data/maildir/"
 persons = ["badeer-r"] # KNN = SVM with seed = 11
 persons = ["hyatt-k"]
 categoriesToRemove = ['_sent_mail', 'deleted_items', 'all_documents', 'sent_items', 'inbox', 'sent', 'contacts', 'notes_inbox', 'discussion_threads', 'calendar']
+numberOfWordToRemain = 10
+
 if len(persons) == 0:
     persons = [ name for name in listdir(dbFolder) if isdir(join(dbFolder, name)) ]
 
@@ -82,9 +84,17 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 
 
             # Writing in CSV
+
+            # wordCountMaxes = []
+            # wordCountCopy = list(wordCount.values()).copy()
+            # for numberOfWordToRemainIndex in range(1,numberOfWordToRemain):
+            #     wordCountMax = max(wordCountCopy)
+            #     wordCountMaxes.append(wordCountMax)
+            #     wordCountCopy.pop(wordCountCopy.index(wordCountMax))
+            # print(wordCountMaxes)
             wordInHeadListCount = 0
             for word in headList:
-                if wordCount[word] > 2:
+                if wordCount[word] < numberOfWordToRemain:
                     headList.pop(wordInHeadListCount)
                 wordInHeadListCount += 1
             headList.append("target-category")
@@ -93,7 +103,7 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
                 oneLineCSV = []
                 for word in headList:
                     try:
-                        if wordCount[word] > 5:
+                        if wordCount[word] > numberOfWordToRemain:
                             try:
                                 oneLineCSV.append(line[word])
                             except KeyError as e:
