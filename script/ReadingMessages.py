@@ -7,7 +7,7 @@ from PrepareTexts import *
 
 dbFolder = "../data/raw-data/maildir/"
 
-persons = ["badeer-r"]
+persons = ["badeer-r"] # KNN = SVM with seed = 11
 persons = ["hyatt-k"]
 categoriesToRemove = ['_sent_mail', 'deleted_items', 'all_documents', 'sent_items', 'inbox', 'sent', 'contacts', 'notes_inbox', 'discussion_threads', 'calendar']
 if len(persons) == 0:
