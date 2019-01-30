@@ -2,6 +2,10 @@
 from os import listdir
 from os.path import isfile, join, isdir
 import csv
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from random import randint
 
 from PrepareTexts import *
 
@@ -11,6 +15,8 @@ persons = ["badeer-r"] # KNN = SVM with seed = 11
 persons = ["hyatt-k"]
 categoriesToRemove = ['_sent_mail', 'deleted_items', 'all_documents', 'sent_items', 'inbox', 'sent', 'contacts', 'notes_inbox', 'discussion_threads', 'calendar']
 numberOfWordToRemain = 10
+
+categoriesNumber = dict();
 
 if len(persons) == 0:
     persons = [ name for name in listdir(dbFolder) if isdir(join(dbFolder, name)) ]
@@ -56,6 +62,7 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
 
                 personOneCategoryFolder = join(personMaildirFolder, category)
                 personCategoryMailFiles = [f for f in listdir(personOneCategoryFolder) if isfile(join(personOneCategoryFolder, f))]
+                categoriesNumber[category] = len(personCategoryMailFiles)
                 for filename in personCategoryMailFiles:
                     loading += 1
                     if loading % 50 == 0:
@@ -111,4 +118,34 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
                     except KeyError as err: # For target-category
                         oneLineCSV.append(line[word])
                 fileWriterBodyOnly.writerow(oneLineCSV)
+
+def alea_accuracy():
+    le = LabelEncoder()
+    le.fit(list(categoriesNumber.keys()))
+
+    csvsPath = "../data/csv-data/"
+
+    emailsFileList = [f for f in listdir(csvsPath) if f.startswith("emails_")]
+    for file in emailsFileList:
+        emailFilename = join(csvsPath, file)
+        csvFile = open(emailFilename, 'r', newline='')
+        fileReader = csv.reader(csvFile, delimiter=',')
+        dataframe = []
+        targets = []
+        next(fileReader)
+        i = 0
+        compteur = 0
+        for line in fileReader:
+            targets.append(line.pop())
+            dataframe.append(list(map(float, line)))
+        targetFit = le.fit(targets)
+        for target in targets:
+            alea = randint(0, len(categoriesNumber)-1)
+            if ( alea == targetFit[i]):
+                compteur += 1
+            i += 1
+        accuracy = compteur / i * 100
+        print(accuracy)
+
 dataPrepare(dbFolder, persons)
+alea_accuracy()
