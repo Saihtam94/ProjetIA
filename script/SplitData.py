@@ -36,10 +36,10 @@ for file in emailsFileList:
     for line in X_train:
         x_train_fileWriter.writerow(line)
     for line in y_train:
-        y_train_fileWriter.writerow(line)
+        y_train_fileWriter.writerow([line])
     for line in X_test:
         x_test_fileWriter.writerow(line)
     for line in y_test:
-        y_test_fileWriter.writerow(line)
+        y_test_fileWriter.writerow([line])
 
 print("Splitting data DONE.")
