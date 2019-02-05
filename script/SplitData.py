@@ -13,7 +13,7 @@ random_state=0
 emailsFileList = [f for f in listdir(csvsPath) if f.startswith("emails_")]
 print(emailsFileList)
 for file in emailsFileList:
-    if not join(csvsPath, file):
+    if not isdir(join(csvsPath, file)):
         print(file)
         emailFilename = join(csvsPath, file)
         csvFile = open(emailFilename, 'r', newline='')
