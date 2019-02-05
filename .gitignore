@@ -1,5 +1,6 @@
 data/raw-data/maildir/*
-data/csv-data/*
+data/csv-data/description.md
+data/csv-data/*.csv
 
 *__pycache__*
 
