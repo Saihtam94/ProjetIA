@@ -23,6 +23,11 @@ def parseBody(text):
 		count(word, data)
 	return data
 
+def parseSubject(subjectText, subjectBagOfWordToAdd):
+    filtered_words = prepareText(subjectText)
+    for word in subjectText:
+        count(word, subjectBagOfWordToAdd)
+
 def parseBodyStemming(text):
 	filtered_words = prepareText(text)
 

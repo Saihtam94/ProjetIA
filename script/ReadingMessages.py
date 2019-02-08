@@ -2,9 +2,6 @@
 from os import listdir
 from os.path import isfile, join, isdir
 import csv
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 from random import randint
 
 from PrepareTexts import *
@@ -14,9 +11,10 @@ dbFolder = "../data/raw-data/maildir/"
 persons = ["badeer-r"] # KNN = SVM with seed = 11
 persons = ["hyatt-k"]
 categoriesToRemove = ['_sent_mail', 'deleted_items', 'all_documents', 'sent_items', 'inbox', 'sent', 'contacts', 'notes_inbox', 'discussion_threads', 'calendar']
-numberOfWordToRemain = 10
+numberOfWordToRemain = 15
+subjectWordsWeight = 0 # 0 = disable the feature
 
-categoriesNumber = dict();
+categoriesNumber = dict()
 
 if len(persons) == 0:
     persons = [ name for name in listdir(dbFolder) if isdir(join(dbFolder, name)) ]
@@ -85,6 +83,20 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
                             wordCount[word] += value
                         except KeyError as e:
                             wordCount[word] = value
+
+                    if subjectWordsWeight != 0:
+                        subjectBagOfWordToAdd = dict()
+                        parseSubject(oneLineCSV["subject"], subjectBagOfWordToAdd)
+                        for word, value in subjectBagOfWordToAdd.items():
+                            value *= subjectWordsWeight
+                            if word not in headList:
+                                headList.append(word)
+                            wordList[word] = value
+                            try:
+                                wordCount[word] += value
+                            except KeyError as e:
+                                wordCount[word] = value
+
                     wordList["target-category"] = category
                     wordMatrix.append(wordList)
 
@@ -118,14 +130,12 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
                     except KeyError as err: # For target-category
                         oneLineCSV.append(line[word])
                 fileWriterBodyOnly.writerow(oneLineCSV)
+            csvFileBodyOnly.close()
 
 def alea_accuracy():
-    le = LabelEncoder()
-    le.fit(list(categoriesNumber.keys()))
-
+    categoriesInList = list(categoriesNumber.keys())
     csvsPath = "../data/csv-data/"
-
-    emailsFileList = [f for f in listdir(csvsPath) if f.startswith("emails_")]
+    emailsFileList = [f for f in listdir(csvsPath) if isfile(join(csvsPath, f)) and f.startswith("emails_")]
     for file in emailsFileList:
         emailFilename = join(csvsPath, file)
         csvFile = open(emailFilename, 'r', newline='')
@@ -138,14 +148,13 @@ def alea_accuracy():
         for line in fileReader:
             targets.append(line.pop())
             dataframe.append(list(map(float, line)))
-        targetFit = le.fit(targets)
         for target in targets:
             alea = randint(0, len(categoriesNumber)-1)
-            if ( alea == targetFit[i]):
+            if (categoriesInList[alea] == targets[i]):
                 compteur += 1
             i += 1
         accuracy = compteur / i * 100
-        print(accuracy)
+        print("random accuracy = " + str(accuracy))
 
 dataPrepare(dbFolder, persons)
 alea_accuracy()
