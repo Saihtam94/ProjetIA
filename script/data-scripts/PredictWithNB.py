@@ -9,6 +9,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
 csvsPath = "../../data/csv-data/"
+resultsPath = "../../results/"
 
 emailsFileList = [f for f in listdir(csvsPath) if f.startswith("emails_")]
 for file in emailsFileList:
@@ -50,7 +51,17 @@ for file in emailsFileList:
 		neigh = gnb.fit(X_train, y_train)
 		result = neigh.predict(X_test)
 		classif_report = classification_report(y_test, result)
+		accuracy = accuracy_score(y_test, result)
 		print("\n### Naive Bayes for "+ file.split("_")[1] +" ###")
 		print(classif_report)
-		print("accuracy_score = " + str(accuracy_score(y_test, result)))
+		print("accuracy_score = " + str(accuracy))
 		
+
+		evolutionOfAccuracyFile = open(join(resultsPath, "NBAccuracyEvolution.csv"), 'w', newline='')
+		fileWriter = csv.writer(evolutionOfAccuracyFile, delimiter=',')
+		fileWriter.writerow(["Number of mail", "Accuracy"])
+		for numberOfMailToTrain in range(5, len(y_train)):
+			gnb = GaussianNB()
+			neigh = gnb.fit(X_train[0:numberOfMailToTrain], y_train[0:numberOfMailToTrain])
+			result = neigh.predict(X_test)
+			fileWriter.writerow([numberOfMailToTrain, str(accuracy_score(y_test, result)).replace('.',',')])

@@ -91,7 +91,10 @@ def dataPrepare(databasePath, persons, csvFileName="../data/csv-data/emails", cs
                             value *= subjectWordsWeight
                             if word not in headList:
                                 headList.append(word)
-                            wordList[word] = value
+                            try:
+                                wordList[word] += value
+                            except KeyError as e:
+                                wordList[word] = value
                             try:
                                 wordCount[word] += value
                             except KeyError as e:
