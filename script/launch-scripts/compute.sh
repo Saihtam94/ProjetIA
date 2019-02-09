@@ -4,6 +4,7 @@ $PYTHON_LAUNCHER ReadingMessages.py
 $PYTHON_LAUNCHER SplitData.py
 cd data-scripts
 
+$PYTHON_LAUNCHER PredictWithAdaboost.py
 $PYTHON_LAUNCHER PredictWithDecisionTree.py
 $PYTHON_LAUNCHER PredictWithKnn.py
 #$PYTHON_LAUNCHER PredictWithLogisticRegression.py

@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
 import pandas
 
 csvsPath = "../../data/csv-data/"
@@ -48,20 +48,20 @@ for file in emailsFileList:
 		for line in fileReader:
 			y_train.append(line.pop())
 
-		neigh = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+		neigh = AdaBoostClassifier()
 		neigh.fit(X_train, y_train)
 		result = neigh.predict(X_test)
 		classif_report = classification_report(y_test, result)
 		accuracy = accuracy_score(y_test, result)
-		print("\n### Random Forest for "+ file.split("_")[1] +" ###")
+		print("\n### AdaBoost for "+ file.split("_")[1] +" ###")
 		print(classif_report)
 		print("accuracy_score = " + str(accuracy))
 		
-		evolutionOfAccuracyFile = open(join(resultsPath, "RandomForestAccuracyEvolution.csv"), 'w', newline='')
+		evolutionOfAccuracyFile = open(join(resultsPath, "AdaBoostAccuracyEvolution.csv"), 'w', newline='')
 		fileWriter = csv.writer(evolutionOfAccuracyFile, delimiter=',')
 		fileWriter.writerow(["Number of mail", "Accuracy"])
 		for numberOfMailToTrain in range(5, len(y_train)):
-			neigh = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+			neigh = AdaBoostClassifier()
 			neigh.fit(X_train[0:numberOfMailToTrain], y_train[0:numberOfMailToTrain])
 			result = neigh.predict(X_test)
 			fileWriter.writerow([numberOfMailToTrain, str(accuracy_score(y_test, result)).replace('.',',')])
